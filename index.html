@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Syntrix — Professional WiFi Security Audits for homes and small businesses across the UK. Ethical, authorised, clearly reported.">
+<title>Syntrix — WiFi Security Audits</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#05090F;--ink2:#090E17;--ink3:#0C1220;--panel:#101828;--panel2:#141F30;--cyan:#00AEEF;--cyanb:#00C8FF;--cyand:#0088CC;--glow:rgba(0,174,239,.18);--glows:rgba(0,174,239,.07);--rim:rgba(0,174,239,.12);--rim2:rgba(0,174,239,.28);--smoke:rgba(255,255,255,.03);--haze:rgba(255,255,255,.06);--t0:#F2F6FA;--t1:#7B90A4;--t2:#3E5265;--t3:#243040;--r:13px;--rl:20px;--ease:cubic-bezier(.16,1,.3,1)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--t0);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.65;cursor:none}
+
+/* CURSOR */
+#cur,#cur-o{position:fixed;border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);will-change:transform}
+#cur{width:8px;height:8px;background:var(--cyan);transition:width .15s var(--ease),height .15s var(--ease),background .2s;mix-blend-mode:screen}
+#cur-o{width:38px;height:38px;border:1px solid rgba(0,174,239,.45);transition:width .35s var(--ease),height .35s var(--ease),border-color .3s}
+.hs #cur{width:14px;height:14px;background:var(--cyanb)}
+.hs #cur-o{width:58px;height:58px;border-color:var(--cyan)}
+
+/* LOADER */
+#loader{position:fixed;inset:0;background:var(--ink);z-index:9000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;transition:opacity .8s var(--ease),visibility .8s}
+#loader.done{opacity:0;visibility:hidden}
+.ld-logo{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.2rem,5vw,3.2rem);font-weight:700;letter-spacing:10px;color:#fff;display:flex;gap:2px}
+.ld-c{display:inline-block;opacity:0;transform:translateY(-50px) rotateX(-90deg);animation:charFall .7s var(--ease) both}
+.ld-c.a{color:var(--cyan)}
+@keyframes charFall{to{opacity:1;transform:none}}
+.ld-track{width:220px;height:1px;background:rgba(255,255,255,.06);border-radius:1px;overflow:hidden}
+.ld-fill{height:100%;width:0;background:linear-gradient(90deg,var(--cyand),var(--cyanb));box-shadow:0 0 12px var(--cyan);transition:width .05s linear}
+.ld-pct{font-family:'Space Grotesk',sans-serif;font-size:.75rem;font-weight:600;color:var(--cyan);letter-spacing:3px}
+
+/* NAV */
+#nav{position:fixed;top:0;left:0;right:0;z-index:500;height:68px;padding:0 5%;display:flex;align-items:center;justify-content:space-between;transition:all .5s var(--ease);border-bottom:1px solid transparent}
+#nav.sc{background:rgba(5,9,15,.88);backdrop-filter:blur(20px) saturate(1.6);border-bottom-color:var(--rim);box-shadow:0 1px 40px rgba(0,0,0,.5)}
+.n-logo{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;letter-spacing:5px;color:#fff;text-decoration:none}
+.n-logo .d{color:var(--cyan)}
+.n-links{list-style:none;display:flex;align-items:center;gap:2.2rem}
+.n-links a{color:var(--t1);font-size:.84rem;text-decoration:none;letter-spacing:.3px;position:relative;transition:color .3s}
+.n-links a:not(.nc)::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--cyan);transition:width .35s var(--ease)}
+.n-links a:not(.nc):hover{color:#fff}
+.n-links a:not(.nc):hover::after{width:100%}
+.nc{border:1px solid var(--rim2)!important;color:var(--cyan)!important;padding:.48rem 1.3rem;border-radius:8px;font-weight:600;font-size:.82rem;letter-spacing:.5px;overflow:hidden;position:relative;transition:color .3s!important}
+.nc::before{content:'';position:absolute;inset:0;background:var(--cyan);transform:translateY(102%);transition:transform .35s var(--ease);z-index:-1}
+.nc:hover{color:#000!important}
+.nc:hover::before{transform:none}
+.ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:none;padding:4px}
+.ham span{display:block;width:22px;height:1.5px;background:var(--t1);border-radius:2px;transition:all .4s var(--ease)}
+.ham.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);background:var(--cyan)}
+.ham.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.ham.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);background:var(--cyan)}
+.mob{position:fixed;top:68px;left:0;right:0;background:rgba(5,9,15,.97);backdrop-filter:blur(24px);border-bottom:1px solid var(--rim);padding:1.5rem 5% 2rem;flex-direction:column;gap:0;display:none;z-index:499}
+.mob.open{display:flex}
+.mob a{color:var(--t1);text-decoration:none;font-size:1.05rem;padding:.9rem 0;border-bottom:1px solid var(--rim);transition:color .3s,padding-left .3s}
+.mob a:hover{color:var(--cyan);padding-left:.4rem}
+.mob .nc{margin-top:1rem;text-align:center;border-bottom:none!important;padding:.85rem!important}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;padding:130px 5% 90px;position:relative;overflow:hidden}
+#hc{position:absolute;inset:0;width:100%;height:100%}
+.hg{position:absolute;inset:0;pointer-events:none;z-index:1;background:radial-gradient(ellipse 60% 55% at 62% 35%,rgba(0,174,239,.065) 0%,transparent 65%),radial-gradient(ellipse 40% 70% at 8% 85%,rgba(0,80,180,.04) 0%,transparent 60%)}
+.hb{position:relative;z-index:2;max-width:800px}
+.h-pill{display:inline-flex;align-items:center;gap:.55rem;border:1px solid var(--rim2);border-radius:100px;padding:.32rem .9rem .32rem .45rem;font-size:.7rem;font-weight:600;color:var(--cyan);letter-spacing:1.8px;text-transform:uppercase;margin-bottom:2rem;background:rgba(0,174,239,.04);opacity:0;transform:translateY(18px);animation:fadeUp .9s var(--ease) .4s both}
+.pd{width:20px;height:20px;border-radius:50%;background:rgba(0,174,239,.1);border:1px solid var(--rim2);display:flex;align-items:center;justify-content:center}
+.pdi{width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:ps 2.2s ease infinite}
+@keyframes ps{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.5}}
+@keyframes fadeUp{to{opacity:1;transform:none}}
+.h-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(3rem,6.5vw,5.2rem);font-weight:700;line-height:1.04;letter-spacing:-2px;color:#fff;margin-bottom:1.5rem}
+.h-title .ln{display:block;overflow:hidden}
+.h-title .lni{display:block;transform:translateY(115%);animation:lineUp .95s var(--ease) both}
+.h-title .ln:nth-child(1) .lni{animation-delay:.5s}
+.h-title .ln:nth-child(2) .lni{animation-delay:.65s;color:var(--cyan)}
+.h-title .ln:nth-child(3) .lni{animation-delay:.8s}
+@keyframes lineUp{to{transform:none}}
+.h-sub{font-size:clamp(.95rem,1.7vw,1.1rem);color:var(--t1);max-width:560px;line-height:1.8;margin-bottom:2.75rem;opacity:0;animation:fadeUp .9s var(--ease) 1.05s both}
+.h-btns{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:4rem;opacity:0;animation:fadeUp .9s var(--ease) 1.2s both}
+.h-stats{display:flex;flex-wrap:wrap;gap:2.8rem;opacity:0;animation:fadeUp .9s var(--ease) 1.35s both}
+.hsn{font-family:'Space Grotesk',sans-serif;font-size:1.85rem;font-weight:700;color:#fff}
+.hsn em{color:var(--cyan);font-style:normal}
+.hsl{font-size:.7rem;color:var(--t2);letter-spacing:.8px;text-transform:uppercase;margin-top:.1rem}
+
+/* BUTTONS */
+.bp,.bs{display:inline-flex;align-items:center;gap:.5rem;padding:.92rem 2.2rem;border-radius:10px;font-weight:600;font-size:.9rem;text-decoration:none;letter-spacing:.3px;border:none;cursor:none;position:relative;overflow:hidden;transition:transform .45s var(--ease),box-shadow .35s}
+.bp{background:var(--cyan);color:#000}
+.bp::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--bx,50%) var(--by,50%),rgba(255,255,255,.28) 0%,transparent 60%);opacity:0;transition:opacity .3s}
+.bp:hover{transform:translateY(-3px);box-shadow:0 14px 44px rgba(0,174,239,.42)}
+.bp:hover::before{opacity:1}
+.bs{background:transparent;color:var(--t0);border:1px solid rgba(255,255,255,.1)}
+.bs::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,.04);transform:translateX(-101%);transition:transform .4s var(--ease)}
+.bs:hover{border-color:var(--rim2);color:var(--cyan);transform:translateY(-3px)}
+.bs:hover::before{transform:none}
+
+/* SHARED SECTION */
+section{padding:120px 5%}
+.se{font-size:.68rem;font-weight:600;color:var(--cyan);letter-spacing:3px;text-transform:uppercase;margin-bottom:.85rem;display:flex;align-items:center;gap:.65rem}
+.se::before{content:'';display:block;width:22px;height:1px;background:var(--cyan)}
+.sh{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.9rem,3.8vw,2.9rem);font-weight:700;color:#fff;line-height:1.12;letter-spacing:-.5px;margin-bottom:1rem}
+.ss{font-size:1rem;color:var(--t1);max-width:520px;line-height:1.75}
+.tc{text-align:center}
+.tc .se{justify-content:center}
+.tc .se::before{display:none}
+.tc .ss{margin:0 auto}
+
+/* REVEAL */
+.rv{opacity:0;transform:translateY(36px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.rv.in{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}.d5{transition-delay:.5s}.d6{transition-delay:.6s}
+
+/* SHIMMER */
+@property --sa{syntax:'<angle>';inherits:false;initial-value:0deg}
+.shm{position:relative}
+.shm::before{content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;background:conic-gradient(from var(--sa) at 50% 50%,transparent 0%,var(--cyan) 12%,transparent 24%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .4s;animation:spinSA 3.5s linear infinite paused;z-index:0}
+.shm:hover::before{opacity:1;animation-play-state:running}
+@keyframes spinSA{to{--sa:360deg}}
+
+/* ABOUT */
+#about{background:var(--ink2)}
+.ab-w{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;margin-top:4rem}
+.ab-fs{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:2rem}
+.af{padding:1rem 1.1rem;background:var(--smoke);border:1px solid var(--rim);border-radius:var(--r);display:flex;align-items:flex-start;gap:.75rem;transition:border-color .3s,background .3s,transform .5s var(--ease)}
+.af:hover{border-color:var(--rim2);background:var(--glows);transform:translateY(-3px)}
+.afi{width:34px;height:34px;min-width:34px;background:rgba(0,174,239,.07);border:1px solid var(--rim2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.95rem;transition:box-shadow .3s}
+.af:hover .afi{box-shadow:0 4px 18px rgba(0,174,239,.22)}
+.af strong{display:block;font-size:.82rem;color:var(--t0);margin-bottom:.2rem}
+.af span{font-size:.74rem;color:var(--t2);line-height:1.4}
+.abc{background:var(--panel);border:1px solid var(--rim);border-radius:var(--rl);padding:2rem;position:relative;overflow:hidden;transition:border-color .4s,box-shadow .4s}
+.abc:hover{border-color:var(--rim2);box-shadow:0 0 70px rgba(0,174,239,.07)}
+.abc::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);animation:scan 3s ease infinite}
+@keyframes scan{0%,100%{opacity:.3}50%{opacity:1}}
+.ach{display:flex;align-items:center;gap:.6rem;padding-bottom:1rem;border-bottom:1px solid var(--rim);margin-bottom:1.25rem}
+.acl{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:ps 2.5s ease infinite}
+.act{font-size:.78rem;color:var(--t1)}
+.acr{display:flex;flex-direction:column;gap:.6rem}
+.acrow{display:flex;align-items:center;gap:.75rem;font-size:.87rem;color:var(--t1);padding:.45rem .65rem;border-radius:8px;transition:background .3s,color .3s}
+.acrow:hover{background:rgba(0,174,239,.06);color:var(--t0)}
+.acrow::before{content:'✓';display:flex;align-items:center;justify-content:center;width:18px;height:18px;min-width:18px;background:rgba(0,174,239,.1);border:1px solid var(--rim2);border-radius:50%;font-size:.6rem;color:var(--cyan);font-weight:700}
+
+/* SERVICES */
+#services{background:var(--ink)}
+.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:4rem}
+.sc{background:var(--panel);border:1px solid var(--rim);border-radius:var(--rl);padding:2.25rem 2rem;display:flex;flex-direction:column;position:relative;overflow:hidden;transition:border-color .4s,transform .55s var(--ease),box-shadow .4s}
+.sc:hover{transform:translateY(-8px);border-color:var(--rim2);box-shadow:0 32px 90px rgba(0,0,0,.6),0 0 70px rgba(0,174,239,.06)}
+.sc.ft{border-color:rgba(0,174,239,.3);background:linear-gradient(160deg,var(--panel2) 0%,var(--panel) 100%)}
+.sc.ft::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 35% at 50% 0%,rgba(0,174,239,.08) 0%,transparent 60%);pointer-events:none}
+.fp{position:absolute;top:0;left:50%;transform:translateX(-50%) translateY(-50%);background:var(--cyan);color:#000;font-size:.62rem;font-weight:700;padding:.22rem .85rem;border-radius:100px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
+.si{width:52px;height:52px;background:rgba(0,174,239,.07);border:1px solid var(--rim2);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:1.5rem;transition:transform .5s var(--ease),box-shadow .35s}
+.sc:hover .si{transform:scale(1.1) rotate(-3deg);box-shadow:0 8px 28px rgba(0,174,239,.22)}
+.sn{font-family:'Space Grotesk',sans-serif;font-size:1.12rem;font-weight:600;color:#fff;margin-bottom:.3rem}
+.sp{font-family:'Space Grotesk',sans-serif;font-size:2.3rem;font-weight:700;color:var(--cyan);margin-bottom:1.5rem;line-height:1}
+.sp small{font-size:.88rem;color:var(--t2);font-weight:400}
+.shr{height:1px;background:var(--rim);margin-bottom:1.5rem}
+.sl{list-style:none;flex:1;display:flex;flex-direction:column;gap:.6rem;margin-bottom:2rem}
+.sl li{display:flex;align-items:flex-start;gap:.6rem;font-size:.84rem;color:var(--t1);transition:color .25s}
+.sc:hover .sl li{color:var(--t0)}
+.sl li::before{content:'→';color:var(--cyan);font-size:.75rem;margin-top:2px;flex-shrink:0}
+.sb{display:block;text-align:center;padding:.8rem;border-radius:10px;font-weight:600;font-size:.88rem;text-decoration:none;cursor:none;border:1px solid var(--rim2);color:var(--cyan);position:relative;overflow:hidden;transition:color .3s,border-color .3s}
+.sb::before{content:'';position:absolute;inset:0;background:var(--cyan);transform:translateY(102%);transition:transform .38s var(--ease)}
+.sb span{position:relative;z-index:1}
+.sb:hover{color:#000;border-color:var(--cyan)}
+.sb:hover::before{transform:none}
+.sc.ft .sb{background:var(--cyan);color:#000;border-color:var(--cyan)}
+.sc.ft .sb::before{background:var(--cyanb)}
+.snote{text-align:center;margin-top:2rem;font-size:.8rem;color:var(--t2)}
+
+/* WHY */
+#why{background:var(--ink2)}
+.wg{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:4rem}
+.wc{padding:1.75rem;background:var(--smoke);border:1px solid var(--rim);border-radius:var(--rl);transition:border-color .35s,background .35s,transform .55s var(--ease);position:relative;overflow:hidden}
+.wc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:0;background:linear-gradient(0deg,rgba(0,174,239,.055),transparent);transition:height .45s var(--ease)}
+.wc:hover{border-color:var(--rim2);background:rgba(0,174,239,.03);transform:translateY(-4px)}
+.wc:hover::after{height:55%}
+.wi{font-size:1.75rem;margin-bottom:1rem;display:block}
+.wt{font-weight:600;color:var(--t0);font-size:.95rem;margin-bottom:.4rem}
+.wd{font-size:.82rem;color:var(--t2);line-height:1.65}
+
+/* TICKER */
+#ticker{background:var(--ink);border-top:1px solid var(--rim);border-bottom:1px solid var(--rim);overflow:hidden}
+.tt{display:flex;white-space:nowrap;animation:ts 28s linear infinite}
+.tt:hover{animation-play-state:paused}
+@keyframes ts{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ti{display:flex;align-items:center;gap:1.2rem;padding:1.65rem 3rem;border-right:1px solid var(--rim);flex-shrink:0}
+.tn{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:700;color:#fff}
+.tn em{color:var(--cyan);font-style:normal}
+.tl{font-size:.7rem;color:var(--t2);letter-spacing:.7px;text-transform:uppercase}
+
+/* PROCESS */
+#process{background:var(--ink2)}
+.pw{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-top:4.5rem;position:relative}
+.pw::before{content:'';position:absolute;top:38px;left:calc(12.5% + 38px);right:calc(12.5% + 38px);height:1px;background:linear-gradient(90deg,var(--cyan) 0%,rgba(0,174,239,.2) 50%,var(--cyan) 100%);animation:scan 3.5s ease infinite}
+.ps{text-align:center;position:relative;z-index:1}
+.pn{width:76px;height:76px;border-radius:50%;background:var(--panel);border:1px solid var(--rim2);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;color:var(--cyan);position:relative;transition:transform .5s var(--ease),background .3s,box-shadow .4s}
+.pn::before{content:'';position:absolute;inset:-5px;border-radius:50%;border:1px solid var(--rim);transition:inset .4s var(--ease),border-color .3s}
+.ps:hover .pn{transform:scale(1.1);background:rgba(0,174,239,.08);box-shadow:0 0 48px rgba(0,174,239,.28)}
+.ps:hover .pn::before{inset:-10px;border-color:var(--rim2)}
+.ptitle{font-weight:600;color:var(--t0);font-size:.95rem;margin-bottom:.4rem}
+.pdesc{font-size:.8rem;color:var(--t2);line-height:1.6}
+
+/* GIFT */
+#giftcard{background:var(--ink)}
+.gw{display:grid;grid-template-columns:1fr 1fr;gap:4.5rem;align-items:center;max-width:1050px;margin:0 auto}
+.gc{background:linear-gradient(145deg,var(--panel2) 0%,var(--panel) 100%);border:1px solid var(--rim2);border-radius:var(--rl);padding:2.75rem;position:relative;overflow:hidden;transition:transform .55s var(--ease),box-shadow .45s;transform-style:preserve-3d}
+.gc:hover{box-shadow:0 48px 120px rgba(0,0,0,.6),0 0 100px rgba(0,174,239,.09)}
+.gc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyanb),transparent);animation:scan 2.5s ease infinite}
+.gc::after{content:'';position:absolute;bottom:-60px;right:-60px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(0,174,239,.13) 0%,transparent 70%);animation:br 4.5s ease infinite}
+@keyframes br{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.2);opacity:1}}
+.gpill{display:inline-flex;align-items:center;gap:.4rem;background:rgba(0,174,239,.08);border:1px solid var(--rim2);border-radius:100px;padding:.22rem .8rem;font-size:.67rem;font-weight:600;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:1.5rem}
+.gam{font-family:'Space Grotesk',sans-serif;font-size:4.8rem;font-weight:700;color:#fff;line-height:1;margin-bottom:.4rem}
+.gam span{color:var(--cyan)}
+.gcap{color:var(--t1);font-size:.95rem;margin-bottom:1.75rem}
+.gcode{background:var(--ink);border:1px solid var(--rim);border-radius:8px;padding:.78rem 1rem;font-family:'Space Grotesk',sans-serif;font-size:.88rem;color:var(--t2);letter-spacing:2.5px;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
+.gcode span{color:var(--cyan)}
+.gperks{display:flex;flex-direction:column;gap:.7rem;margin:1.5rem 0 2.25rem}
+.gp{display:flex;align-items:center;gap:.75rem;font-size:.88rem;color:var(--t1)}
+.gpd{width:5px;height:5px;min-width:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 6px var(--cyan)}
+
+/* TESTIMONIALS */
+#testimonials{background:var(--ink2)}
+.tg{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:4rem}
+.tc2{background:var(--panel);border:1px solid var(--rim);border-radius:var(--rl);padding:2rem;position:relative;overflow:hidden;transition:border-color .35s,transform .55s var(--ease),box-shadow .4s}
+.tc2::before{content:'\201C';position:absolute;top:-10px;right:1.5rem;font-size:7rem;color:rgba(0,174,239,.06);font-family:'Space Grotesk',sans-serif;font-weight:700;line-height:1;pointer-events:none}
+.tc2:hover{border-color:var(--rim2);transform:translateY(-5px);box-shadow:0 24px 70px rgba(0,0,0,.45)}
+.tst{color:var(--cyan);letter-spacing:2px;font-size:.85rem;margin-bottom:1rem}
+.ttx{font-size:.87rem;color:var(--t1);line-height:1.75;margin-bottom:1.5rem;font-style:italic}
+.tau{display:flex;align-items:center;gap:.75rem}
+.tav{width:40px;height:40px;border-radius:50%;background:rgba(0,174,239,.08);border:1px solid var(--rim2);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.75rem;color:var(--cyan)}
+.tnm{font-weight:600;font-size:.85rem;color:var(--t0)}
+.tro{font-size:.75rem;color:var(--t2)}
+
+/* FAQ */
+#faq{background:var(--ink)}
+.fl{max-width:740px;margin:3.5rem auto 0;display:flex;flex-direction:column;gap:.65rem}
+.fi{background:var(--panel);border:1px solid var(--rim);border-radius:var(--r);overflow:hidden;transition:border-color .3s}
+.fi.op{border-color:var(--rim2)}
+.fq{width:100%;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.5rem;background:none;border:none;cursor:none;color:var(--t0);font-size:.9rem;font-weight:500;text-align:left;gap:1rem;transition:color .3s}
+.fq:hover{color:#fff}
+.fa-arr{width:22px;height:22px;min-width:22px;border-radius:50%;background:rgba(0,174,239,.08);border:1px solid var(--rim2);display:flex;align-items:center;justify-content:center;font-size:.6rem;color:var(--cyan);transition:transform .45s var(--ease),background .3s}
+.fi.op .fa-arr{transform:rotate(180deg);background:var(--cyan);color:#000}
+.fa{max-height:0;overflow:hidden;font-size:.87rem;color:var(--t1);line-height:1.75;transition:max-height .5s var(--ease),padding .35s;padding:0 1.5rem}
+.fi.op .fa{max-height:200px;padding:.2rem 1.5rem 1.25rem}
+
+/* CONTACT */
+#contact{background:var(--ink2)}
+.cw{display:grid;grid-template-columns:1fr 1.65fr;gap:4.5rem;margin-top:4rem;align-items:start}
+.cb{color:var(--t1);font-size:.93rem;line-height:1.75;margin-bottom:2.25rem}
+.cds{display:flex;flex-direction:column;gap:.85rem}
+.cd{display:flex;align-items:center;gap:.85rem;font-size:.87rem;color:var(--t1);transition:color .3s}
+.cd:hover{color:var(--t0)}
+.cdi{width:38px;height:38px;min-width:38px;background:rgba(0,174,239,.07);border:1px solid var(--rim2);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.95rem;transition:box-shadow .3s}
+.cd:hover .cdi{box-shadow:0 4px 18px rgba(0,174,239,.2)}
+.cf{background:var(--panel);border:1px solid var(--rim);border-radius:var(--rl);padding:2.5rem;position:relative;overflow:hidden}
+.cf::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);animation:scan 3s ease infinite}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin-bottom:.85rem}
+.fg{display:flex;flex-direction:column;gap:.38rem;margin-bottom:.85rem}
+.fg label{font-size:.73rem;font-weight:500;color:var(--t1);letter-spacing:.3px}
+.fg input,.fg select,.fg textarea{background:rgba(255,255,255,.03);border:1px solid var(--rim);border-radius:9px;padding:.76rem 1rem;color:var(--t0);font-size:.87rem;font-family:'Inter',sans-serif;outline:none;width:100%;appearance:none;transition:border-color .3s,box-shadow .3s,background .3s}
+.fg select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2300AEEF' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center;padding-right:2.5rem;background-color:rgba(255,255,255,.03)}
+.fg select option{background:#0C1220}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:rgba(0,174,239,.42);background:rgba(0,174,239,.03);box-shadow:0 0 0 3px rgba(0,174,239,.08)}
+.fg input::placeholder,.fg textarea::placeholder{color:var(--t3)}
+.fg textarea{min-height:100px;resize:vertical}
+.fsub{width:100%;padding:.98rem;background:var(--cyan);color:#000;font-weight:700;font-size:.95rem;border:none;border-radius:10px;cursor:none;font-family:'Inter',sans-serif;letter-spacing:.3px;position:relative;overflow:hidden;transition:transform .45s var(--ease),box-shadow .35s}
+.fsub::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--bx,50%) var(--by,50%),rgba(255,255,255,.3) 0%,transparent 55%);opacity:0;transition:opacity .3s}
+.fsub:hover{transform:translateY(-2px);box-shadow:0 14px 44px rgba(0,174,239,.44)}
+.fsub:hover::before{opacity:1}
+.fn{text-align:center;font-size:.72rem;color:var(--t3);margin-top:.75rem}
+
+/* FOOTER */
+footer{background:var(--ink);border-top:1px solid var(--rim);padding:3.5rem 5% 2rem}
+.ftg{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;padding-bottom:2.5rem;border-bottom:1px solid var(--rim);margin-bottom:2rem}
+.ftb p{font-size:.82rem;color:var(--t2);line-height:1.7;margin-top:.75rem;max-width:240px}
+.ftc h4{font-size:.7rem;font-weight:600;color:var(--t1);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:1rem}
+.ftc a{display:block;font-size:.82rem;color:var(--t2);text-decoration:none;margin-bottom:.55rem;transition:color .3s,padding-left .3s}
+.ftc a:hover{color:var(--cyan);padding-left:.3rem}
+.ftbot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.ftcopy{font-size:.78rem;color:var(--t2)}
+.ftlive{display:flex;align-items:center;gap:.5rem;font-size:.74rem;color:var(--t2)}
+.ld{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:ps 2s ease infinite}
+
+/* RESPONSIVE */
+@media(max-width:1024px){.sg,.wg,.tg{grid-template-columns:1fr 1fr}.pw{grid-template-columns:1fr 1fr}.pw::before{display:none}.ftg{grid-template-columns:1fr 1fr}.ab-w{grid-template-columns:1fr;gap:2.5rem}}
+@media(max-width:768px){section{padding:80px 5%}.sg,.wg,.tg{grid-template-columns:1fr}.gw,.cw{grid-template-columns:1fr}.fr{grid-template-columns:1fr}.n-links{display:none}.ham{display:flex}.ab-fs{grid-template-columns:1fr}body{cursor:auto}#cur,#cur-o{display:none}}
+@media(max-width:480px){.ftg{grid-template-columns:1fr}.pw{grid-template-columns:1fr}.ftbot{flex-direction:column;text-align:center}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}.tt{animation:none}}
+</style>
+</head>
+<body>
+<div id="cur"></div>
+<div id="cur-o"></div>
+
+<div id="loader">
+  <div class="ld-logo">
+    <span class="ld-c" style="animation-delay:.06s">S</span><span class="ld-c" style="animation-delay:.12s">Y</span><span class="ld-c" style="animation-delay:.18s">N</span><span class="ld-c a" style="animation-delay:.24s">T</span><span class="ld-c" style="animation-delay:.30s">R</span><span class="ld-c" style="animation-delay:.36s">I</span><span class="ld-c" style="animation-delay:.42s">X</span>
+  </div>
+  <div class="ld-track"><div class="ld-fill" id="ldF"></div></div>
+  <div class="ld-pct" id="ldP">0%</div>
+</div>
+
+<nav id="nav">
+  <a href="#hero" class="n-logo">SYN<span class="d">T</span>RIX</a>
+  <ul class="n-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#giftcard">Gift Cards</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contact" class="nc">Book an Audit</a></li>
+  </ul>
+  <button class="ham" id="ham" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+</nav>
+<nav class="mob" id="mob">
+  <a href="#about">About</a><a href="#services">Services</a><a href="#process">How It Works</a><a href="#giftcard">Gift Cards</a><a href="#faq">FAQ</a><a href="#contact" class="nc">Book an Audit</a>
+</nav>
+
+<section id="hero">
+  <canvas id="hc"></canvas>
+  <div class="hg"></div>
+  <div class="hb">
+    <div class="h-pill"><span class="pd"><span class="pdi"></span></span>UK Based &middot; Fully Authorised Testing</div>
+    <h1 class="h-title">
+      <span class="ln"><span class="lni">Professional</span></span>
+      <span class="ln"><span class="lni">WiFi Security</span></span>
+      <span class="ln"><span class="lni">Audits</span></span>
+    </h1>
+    <p class="h-sub">Protect your home or business network with professional security assessments performed with your explicit authorisation. Clear reports. Practical steps.</p>
+    <div class="h-btns">
+      <a href="#contact" class="bp">Book an Audit &rarr;</a>
+      <a href="#services" class="bs">View Services</a>
+    </div>
+    <div class="h-stats">
+      <div><div class="hsn"><em data-n="100" data-s="%">0%</em></div><div class="hsl">Authorised only</div></div>
+      <div><div class="hsn"><em data-n="48" data-s="hr">0hr</em></div><div class="hsl">Report turnaround</div></div>
+      <div><div class="hsn"><em data-p="&pound;" data-n="100" data-s="">&#163;0</em></div><div class="hsl">Starting from</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="ab-w">
+    <div>
+      <p class="se rv">About Syntrix</p>
+      <h2 class="sh rv d1">WiFi security made simple</h2>
+      <p class="ss rv d2" style="margin-bottom:1.25rem">Syntrix helps homeowners and small businesses understand and strengthen their wireless security. No jargon. No scare tactics. Just honest findings and steps you can actually take.</p>
+      <p class="rv d3" style="font-size:.84rem;color:var(--t2);margin-bottom:2rem;line-height:1.7">Every assessment begins with a written authorisation agreement &mdash; you stay in control from start to finish.</p>
+      <div class="ab-fs rv d3">
+        <div class="af"><div class="afi">&#128272;</div><div><strong>Authorisation First</strong><span>Written permission before any testing begins</span></div></div>
+        <div class="af"><div class="afi">&#128203;</div><div><strong>Clear Reports</strong><span>Plain-English findings you can act on</span></div></div>
+        <div class="af"><div class="afi">&#127891;</div><div><strong>Educational</strong><span>We explain what we found and why it matters</span></div></div>
+        <div class="af"><div class="afi">&#128737;&#65039;</div><div><strong>Ethical Practice</strong><span>Professional, responsible, fully transparent</span></div></div>
+      </div>
+    </div>
+    <div class="rv d2">
+      <div class="abc shm" id="abC">
+        <div class="ach"><div class="acl"></div><span class="act">What gets checked in a standard audit</span></div>
+        <div class="acr">
+          <div class="acrow">WiFi encryption type (WPA2, WPA3)</div>
+          <div class="acrow">Password strength and security</div>
+          <div class="acrow">Router configuration and settings</div>
+          <div class="acrow">Unknown or unauthorised devices</div>
+          <div class="acrow">Signal coverage and leakage</div>
+          <div class="acrow">Guest network configuration</div>
+          <div class="acrow">Firmware and update status</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="tc rv">
+    <p class="se">Pricing</p>
+    <h2 class="sh">Choose your audit</h2>
+    <p class="ss">All audits include a written report and start with your signed authorisation agreement.</p>
+  </div>
+  <div class="sg">
+    <div class="sc shm rv d1">
+      <div class="si">&#128269;</div>
+      <div class="sn">Standard Audit</div>
+      <div class="sp">&pound;100 <small>one-off</small></div>
+      <div class="shr"></div>
+      <ul class="sl"><li>Wireless security review</li><li>Password strength guidance</li><li>Encryption review</li><li>Router configuration check</li><li>Security recommendations</li><li>Written report</li></ul>
+      <a href="#contact" class="sb"><span>Book Now</span></a>
+    </div>
+    <div class="sc ft shm rv d2">
+      <div class="fp">Most Popular</div>
+      <div class="si">&#127968;</div>
+      <div class="sn">Full Home Audit</div>
+      <div class="sp">&pound;200 <small>one-off</small></div>
+      <div class="shr"></div>
+      <ul class="sl"><li>Everything in Standard Audit</li><li>Connected device review</li><li>Network layout review</li><li>Guest network recommendations</li><li>Coverage &amp; signal review</li><li>Full written report</li></ul>
+      <a href="#contact" class="sb"><span>Book Now</span></a>
+    </div>
+    <div class="sc shm rv d3">
+      <div class="si">&#127970;</div>
+      <div class="sn">Business Audit</div>
+      <div class="sp">&pound;400<small>&ndash;&pound;2,000</small></div>
+      <div class="shr"></div>
+      <ul class="sl"><li>Business WiFi assessment</li><li>Full security review</li><li>Configuration review</li><li>Risk summary report</li><li>Professional documentation</li><li>Tailored recommendations</li></ul>
+      <a href="#contact" class="sb"><span>Enquire First</span></a>
+    </div>
+  </div>
+  <p class="snote rv">Business pricing varies by site size and scope &mdash; contact Syntrix before booking.</p>
+</section>
+
+<section id="why">
+  <div class="tc rv">
+    <p class="se">Why Syntrix</p>
+    <h2 class="sh">Built around trust</h2>
+    <p class="ss">Security testing should feel safe, not stressful.</p>
+  </div>
+  <div class="wg">
+    <div class="wc rv"><span class="wi">&#9989;</span><div class="wt">Ethical Testing</div><div class="wd">All testing follows responsible principles. Nothing outside what you&apos;ve agreed to.</div></div>
+    <div class="wc rv d1"><span class="wi">&#128221;</span><div class="wt">Authorisation Required</div><div class="wd">You sign a clear agreement before testing begins. You stay in control throughout.</div></div>
+    <div class="wc rv d2"><span class="wi">&#128196;</span><div class="wt">Professional Reports</div><div class="wd">Plain-English findings with risk ratings &mdash; not a wall of technical jargon.</div></div>
+    <div class="wc rv d3"><span class="wi">&#128274;</span><div class="wt">Privacy Focused</div><div class="wd">Your data and findings are confidential. Nothing shared without your permission.</div></div>
+    <div class="wc rv d4"><span class="wi">&#128161;</span><div class="wt">Practical Advice</div><div class="wd">Clear, achievable steps you can take today &mdash; not just a list of problems.</div></div>
+    <div class="wc rv d5"><span class="wi">&#127468;&#127463;</span><div class="wt">UK Based</div><div class="wd">Serving homes and small businesses across the UK. Local, reliable, easy to reach.</div></div>
+  </div>
+</section>
+
+<div id="ticker">
+  <div class="tt" id="tt">
+    <div class="ti"><div class="tn"><em>100</em>%</div><div class="tl">Authorised only</div></div>
+    <div class="ti"><div class="tn"><em>48</em>hr</div><div class="tl">Report turnaround</div></div>
+    <div class="ti"><div class="tn"><em>5</em> yrs</div><div class="tl">Data confidentiality</div></div>
+    <div class="ti"><div class="tn">&pound;<em>100</em></div><div class="tl">Starting price</div></div>
+    <div class="ti"><div class="tn"><em>1</em> visit</div><div class="tl">Usually all it takes</div></div>
+    <div class="ti"><div class="tn"><em>100</em>%</div><div class="tl">Written permission</div></div>
+    <div class="ti"><div class="tn"><em>48</em>hr</div><div class="tl">Report turnaround</div></div>
+    <div class="ti"><div class="tn"><em>5</em> yrs</div><div class="tl">Data confidentiality</div></div>
+    <div class="ti"><div class="tn">&pound;<em>100</em></div><div class="tl">Starting price</div></div>
+    <div class="ti"><div class="tn"><em>1</em> visit</div><div class="tl">Usually all it takes</div></div>
+  </div>
+</div>
+
+<section id="process">
+  <div class="tc rv">
+    <p class="se">How It Works</p>
+    <h2 class="sh">Four simple steps</h2>
+    <p class="ss">From first contact to final report &mdash; here&apos;s exactly what to expect.</p>
+  </div>
+  <div class="pw">
+    <div class="ps rv"><div class="pn">1</div><div class="ptitle">Get in Touch</div><div class="pdesc">Tell us about your setup. We&apos;ll confirm the right service for you.</div></div>
+    <div class="ps rv d1"><div class="pn">2</div><div class="ptitle">Sign the Agreement</div><div class="pdesc">Read and sign the authorisation agreement. Full transparency, always.</div></div>
+    <div class="ps rv d2"><div class="pn">3</div><div class="ptitle">The Assessment</div><div class="pdesc">We carry out the agreed security check professionally and carefully.</div></div>
+    <div class="ps rv d3"><div class="pn">4</div><div class="ptitle">Your Report</div><div class="pdesc">Receive a clear written report with findings, ratings, and next steps.</div></div>
+  </div>
+</section>
+
+<section id="giftcard">
+  <div class="gw">
+    <div class="gc rv" id="gC">
+      <div class="gpill">&#9889; Limited Offer</div>
+      <div class="gam">&pound;<span>25</span> OFF</div>
+      <div class="gcap">Your first WiFi security audit</div>
+      <div class="gcode">Gift code: <span>SYN-XXXX-XXXX</span></div>
+    </div>
+    <div class="rv d1">
+      <p class="se">Gift Cards</p>
+      <h2 class="sh">Share the security</h2>
+      <p class="ss">Know someone whose WiFi could do with a check? Give them &pound;25 off their first audit.</p>
+      <div class="gperks">
+        <div class="gp"><span class="gpd"></span>First 10 customers get &pound;25 off automatically</div>
+        <div class="gp"><span class="gpd"></span>Referral gift cards available on request</div>
+        <div class="gp"><span class="gpd"></span>Valid against Standard or Full Home Audit</div>
+        <div class="gp"><span class="gpd"></span>One per household</div>
+      </div>
+      <a href="#contact" class="bp">Request a Gift Card &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<section id="testimonials">
+  <div class="tc rv">
+    <p class="se">Testimonials</p>
+    <h2 class="sh">What customers say</h2>
+    <p class="ss">Honest feedback from real homes and businesses.</p>
+  </div>
+  <div class="tg">
+    <div class="tc2 rv"><div class="tst">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="ttx">&ldquo;I had no idea my router was still using an old encryption standard. The report was easy to follow and I sorted everything the same afternoon.&rdquo;</p><div class="tau"><div class="tav">SJ</div><div><div class="tnm">Sarah J.</div><div class="tro">Homeowner, Kent</div></div></div></div>
+    <div class="tc2 rv d1"><div class="tst">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="ttx">&ldquo;Really professional from start to finish. The authorisation agreement made me feel comfortable &mdash; I always knew exactly what was happening.&rdquo;</p><div class="tau"><div class="tav">MT</div><div><div class="tnm">Mark T.</div><div class="tro">Small business owner, Essex</div></div></div></div>
+    <div class="tc2 rv d2"><div class="tst">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="ttx">&ldquo;I was a bit nervous but it was completely stress-free. Found a device connected I didn&apos;t recognise &mdash; well worth the money.&rdquo;</p><div class="tau"><div class="tav">LP</div><div><div class="tnm">Laura P.</div><div class="tro">Homeowner, London</div></div></div></div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="tc rv">
+    <p class="se">FAQ</p>
+    <h2 class="sh">Common questions</h2>
+    <p class="ss">Anything else &mdash; just get in touch.</p>
+  </div>
+  <div class="fl">
+    <div class="fi rv"><button class="fq" aria-expanded="false">Do I need to be home during the audit?<span class="fa-arr">&#9662;</span></button><div class="fa">Yes &mdash; someone needs to be present to let us in and answer questions. For business audits, an authorised representative should be available throughout.</div></div>
+    <div class="fi rv d1"><button class="fq" aria-expanded="false">Is written authorisation really required?<span class="fa-arr">&#9662;</span></button><div class="fa">Absolutely. Every assessment starts with a signed agreement. This protects you and ensures the testing is fully lawful. No agreement, no testing.</div></div>
+    <div class="fi rv d2"><button class="fq" aria-expanded="false">Will my personal data be kept private?<span class="fa-arr">&#9662;</span></button><div class="fa">Yes. Your details and all findings are kept strictly confidential and never shared without your permission. Syntrix complies with UK GDPR.</div></div>
+    <div class="fi rv d3"><button class="fq" aria-expanded="false">How long does an audit take?<span class="fa-arr">&#9662;</span></button><div class="fa">A standard home audit takes 1&ndash;2 hours. A full home audit 2&ndash;3 hours. Business audits vary &mdash; we&apos;ll give you an estimate before booking.</div></div>
+    <div class="fi rv d4"><button class="fq" aria-expanded="false">What will I receive at the end?<span class="fa-arr">&#9662;</span></button><div class="fa">A written report within 48 hours &mdash; plain-English summary, findings with risk ratings, and clear steps to improve your security.</div></div>
+    <div class="fi rv d5"><button class="fq" aria-expanded="false">Can I use a gift card against any service?<span class="fa-arr">&#9662;</span></button><div class="fa">Gift cards are valid against Standard and Full Home Audits. Not currently applicable to Business Audits. One gift card per household.</div></div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="cw">
+    <div>
+      <p class="se rv">Get in Touch</p>
+      <h2 class="sh rv d1">Book your audit</h2>
+      <p class="cb rv d2">Fill in the form and we&apos;ll reply within 24 hours to confirm your booking and answer any questions.</p>
+      <div class="cds rv d3">
+        <div class="cd"><div class="cdi">&#128231;</div>contact@syntrix.co.uk</div>
+        <div class="cd"><div class="cdi">&#128241;</div>+44 XXXX XXXXXX</div>
+        <div class="cd"><div class="cdi">&#127468;&#127463;</div>United Kingdom &middot; Home visits available</div>
+        <div class="cd"><div class="cdi">&#128336;</div>Mon&ndash;Fri, 9am&ndash;6pm</div>
+      </div>
+    </div>
+    <div class="cf rv d2">
+      <form novalidate>
+        <input type="hidden" name="_subject" value="New Syntrix Audit Booking">
+        <input type="hidden" name="_replyto" id="_replyto">
+        <div class="fr">
+          <div class="fg"><label for="nm">Full Name</label><input type="text" id="nm" name="name" placeholder="Jane Smith" autocomplete="name"></div>
+          <div class="fg"><label for="em">Email Address</label><input type="email" id="em" name="email" placeholder="jane@email.com" autocomplete="email"></div>
+        </div>
+        <div class="fr">
+          <div class="fg"><label for="ph">Phone Number</label><input type="tel" id="ph" name="phone" placeholder="+44 XXXX XXXXXX"></div>
+          <div class="fg"><label for="sv">Service Required</label>
+            <select id="sv" name="service"><option value="" disabled selected>Select a service</option><option>Standard Audit &mdash; &pound;100</option><option>Full Home Audit &mdash; &pound;200</option><option>Business Audit &mdash; Enquire for pricing</option><option>Gift Card enquiry</option><option>General question</option></select>
+          </div>
+        </div>
+        <div class="fg"><label for="msg">Message</label><textarea id="msg" name="message" name="message" placeholder="Tell us about your setup and what you&apos;d like checked&hellip;" rows="4"></textarea></div>
+        <button type="submit" class="fsub" id="subBtn">Book Now &mdash; We&apos;ll reply within 24 hours</button>
+        <p class="fn">No testing takes place without a signed authorisation agreement. Handled in line with UK GDPR.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="ftg">
+    <div class="ftb">
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:700;letter-spacing:5px;color:#fff">SYN<span style="color:var(--cyan)">T</span>RIX</div>
+      <p>Professional WiFi security audits for homes and small businesses across the UK. Ethical, authorised, clearly reported.</p>
+    </div>
+    <div class="ftc"><h4>Services</h4><a href="#services">Standard Audit</a><a href="#services">Full Home Audit</a><a href="#services">Business Audit</a><a href="#giftcard">Gift Cards</a></div>
+    <div class="ftc"><h4>Company</h4><a href="#about">About Syntrix</a><a href="#why">Why Choose Us</a><a href="#process">How It Works</a><a href="#testimonials">Testimonials</a></div>
+    <div class="ftc"><h4>Legal</h4><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Gift Card Terms</a><a href="#contact">Contact</a></div>
+  </div>
+  <div class="ftbot">
+    <div class="ftcopy">&copy; 2025 Syntrix. Sole trader. All rights reserved.</div>
+    <div class="ftlive"><span class="ld"></span>All testing conducted with explicit written authorisation</div>
+  </div>
+</footer>
+
+<script>
+/* CURSOR */
+const C=document.getElementById('cur'),Co=document.getElementById('cur-o');
+let mx=-200,my=-200,ox=-200,oy=-200;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;C.style.left=mx+'px';C.style.top=my+'px';},{passive:true});
+(function ao(){ox+=(mx-ox)*.11;oy+=(my-oy)*.11;Co.style.left=ox+'px';Co.style.top=oy+'px';requestAnimationFrame(ao)})();
+document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>document.body.classList.add('hs'));el.addEventListener('mouseleave',()=>document.body.classList.remove('hs'));});
+
+/* LOADER */
+const ldf=document.getElementById('ldF'),ldp=document.getElementById('ldP');
+let lv=0;
+const liv=setInterval(()=>{lv=Math.min(lv+Math.random()*12+4,98);ldf.style.width=lv+'%';ldp.textContent=Math.floor(lv)+'%';},80);
+window.addEventListener('load',()=>{
+  clearInterval(liv);ldf.style.width='100%';ldp.textContent='100%';
+  setTimeout(()=>{document.getElementById('loader').classList.add('done');document.querySelectorAll('[data-n]').forEach(countUp);},400);
+});
+
+/* NAV */
+window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('sc',scrollY>50);},{passive:true});
+
+/* HAMBURGER */
+const ham=document.getElementById('ham'),mob=document.getElementById('mob');
+ham.addEventListener('click',()=>{const o=ham.classList.toggle('open');mob.classList.toggle('open',o);ham.setAttribute('aria-expanded',o);});
+mob.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{ham.classList.remove('open');mob.classList.remove('open');ham.setAttribute('aria-expanded','false');}));
+
+/* CANVAS */
+(()=>{
+  const cv=document.getElementById('hc'),ctx=cv.getContext('2d');
+  let W,H,pts;const N=72,CN=135;let mx2=-999,my2=-999;
+  const resize=()=>{W=cv.width=cv.offsetWidth;H=cv.height=cv.offsetHeight;};
+  resize();window.addEventListener('resize',resize,{passive:true});
+  cv.addEventListener('mousemove',e=>{const r=cv.getBoundingClientRect();mx2=e.clientX-r.left;my2=e.clientY-r.top;});
+  cv.addEventListener('mouseleave',()=>{mx2=-999;my2=-999;});
+  pts=Array.from({length:N},()=>({x:Math.random()*(W||800),y:Math.random()*(H||600),vx:(Math.random()-.5)*.38,vy:(Math.random()-.5)*.38,r:Math.random()*1.6+.5}));
+  (function draw(){
+    ctx.clearRect(0,0,W,H);
+    pts.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
+      const dx=p.x-mx2,dy=p.y-my2,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<90){p.x+=dx/d*1.8;p.y+=dy/d*1.8;}
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(0,174,239,.55)';ctx.fill();
+    });
+    for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<CN){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle=`rgba(0,174,239,${(1-d/CN)*.16})`;ctx.lineWidth=.6;ctx.stroke();}}
+    requestAnimationFrame(draw);
+  })();
+})();
+
+/* REVEAL */
+const rvO=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');rvO.unobserve(e.target);}});},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach(el=>rvO.observe(el));
+
+/* COUNTER */
+function countUp(el){const t=+el.dataset.n||0,pre=el.dataset.p||'',suf=el.dataset.s||'',dur=1700;let st=null;(function step(ts){if(!st)st=ts;const pg=Math.min((ts-st)/dur,1),ease=1-Math.pow(1-pg,4);el.textContent=pre+Math.floor(ease*t)+suf;if(pg<1)requestAnimationFrame(step);})(performance.now());}
+
+/* 3D TILT */
+function tilt(el,intensity=10){el.style.transformStyle='preserve-3d';el.addEventListener('mousemove',e=>{const r=el.getBoundingClientRect(),x=((e.clientX-r.left)/r.width-.5)*intensity,y=((e.clientY-r.top)/r.height-.5)*-intensity;el.style.transition='transform .05s linear';el.style.transform=`perspective(900px) rotateX(${y}deg) rotateY(${x}deg) translateZ(6px)`;});el.addEventListener('mouseleave',()=>{el.style.transition='transform .7s cubic-bezier(.16,1,.3,1)';el.style.transform='';});}
+document.querySelectorAll('#abC,#gC,.sc,.tc2').forEach(el=>tilt(el));
+
+/* TICKER */
+const tt=document.getElementById('tt');tt.innerHTML+=tt.innerHTML;
+
+/* MAGNETIC */
+document.querySelectorAll('.bp,.bs,.nc,.fsub').forEach(btn=>{
+  btn.addEventListener('mousemove',e=>{const r=btn.getBoundingClientRect(),x=(e.clientX-r.left-r.width/2)*.22,y=(e.clientY-r.top-r.height/2)*.22;btn.style.setProperty('--bx',((e.clientX-r.left)/r.width*100)+'%');btn.style.setProperty('--by',((e.clientY-r.top)/r.height*100)+'%');btn.style.transform=`translate(${x}px,${y}px)`;});
+  btn.addEventListener('mouseleave',()=>{btn.style.transition='transform .55s cubic-bezier(.16,1,.3,1)';btn.style.transform='';});
+  btn.addEventListener('mouseenter',()=>{btn.style.transition='transform .1s linear';});
+});
+
+/* FAQ */
+document.querySelectorAll('.fq').forEach(btn=>{btn.addEventListener('click',()=>{const fi=btn.closest('.fi'),was=fi.classList.contains('op');document.querySelectorAll('.fi.op').forEach(i=>{i.classList.remove('op');i.querySelector('.fq').setAttribute('aria-expanded','false');});if(!was){fi.classList.add('op');btn.setAttribute('aria-expanded','true');}});});
+
+/* FORM — sends to syntrixkal@gmail.com via Formspree */
+document.querySelector('form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = document.getElementById('subBtn');
+  const orig = btn.textContent;
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+  btn.style.opacity = '.7';
+  try {
+    const fd = new FormData(e.target);
+    fd.set('_replyto', document.getElementById('em').value);
+    const res = /* Formspree endpoint — see setup instructions in the file */
+    await fetch('https://formspree.io/f/xaqgjrvw', {
+      method: 'POST', body: fd,
+      headers: { 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      btn.textContent = '\u2713 Sent! We\'ll reply within 24 hours.';
+      btn.style.background = '#10b981';
+      btn.style.opacity = '1';
+      e.target.reset();
+    } else { throw new Error(); }
+  } catch {
+    btn.textContent = 'Something went wrong \u2014 email syntrixkal@gmail.com';
+    btn.style.background = '#ef4444';
+    btn.style.opacity = '1';
+    btn.disabled = false;
+    setTimeout(() => { btn.textContent = orig; btn.style.background = ''; btn.disabled = false; }, 5000);
+  }
+});
+
+/* PARALLAX HERO */
+window.addEventListener('scroll',()=>{const cv=document.getElementById('hc'),hero=document.getElementById('hero');if(!cv||!hero)return;const pg=Math.min(scrollY/hero.offsetHeight,1);cv.style.transform=`translateY(${pg*55}px)`;const hb=hero.querySelector('.hb');if(hb)hb.style.transform=`translateY(${pg*28}px)`;},{passive:true});
+</script>
+</body>
+</html>
