@@ -1,0 +1,10 @@
+{
+  "name": "Syntrix Security",
+  "short_name": "Syntrix",
+  "description": "Professional WiFi and network security audits for homes and small businesses across the UK.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#04070b",
+  "theme_color": "#04070b",
+  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
